@@ -9,6 +9,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   List itemList = [1, 3, 5];
+  bool editPressed = false;
 
   @override
   Widget build(BuildContext context) {
@@ -65,11 +66,17 @@ class _HomeScreenState extends State<HomeScreen> {
                             onPressed: () {},
                             icon: Icon(Icons.done_outlined),
                           ),
-                          Text("Something"),
+                          editPressed
+                              ? Expanded(child: TextFormField())
+                              : Text("something"),
                           Container(
                             padding: EdgeInsets.only(left: 127),
                             child: IconButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                setState(() {
+                                  editPressed = true;
+                                });
+                              },
                               icon: Icon(Icons.edit),
                             ),
                           ),
