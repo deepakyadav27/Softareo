@@ -55,8 +55,8 @@ class _HomeScreenState extends State<HomeScreen> {
               new TextEditingController(text: element['description']),
             );
             editPressed.add(false);
-            log(editPressed.toString());
           });
+          log(editPressed.toString());
           // });
           return Scaffold(
             backgroundColor: Color(0xffEBEBEB),
@@ -132,45 +132,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         elevation: 3.0,
                         child: Row(
                           children: [
-                            IconButton(
-                              onPressed: () {
-                                if (_controllers[index].text.isNotEmpty) {
-                                  Services().updateData(
-                                      _controllers[index].text, itemId[index]);
-                                  setState(() {
-                                    editPressed[index] = false;
-                                  });
-                                  print(editPressed[index]);
-                                }
-                              },
-                              icon: Icon(Icons.done_outlined),
-                            ),
-                            // editPressed
-                            Expanded(
-                              child: Container(
-                                child: SingleChildScrollView(
-                                  scrollDirection: Axis.vertical,
-                                  child: TextFormField(
-                                    maxLines: null,
-                                    controller: _controllers[index],
-                                    enabled: editPressed[index],
-                                  ),
-                                ),
-                              ),
-                            ),
-                            // : Text(itemList[index]),
-                            Container(
-                              padding: EdgeInsets.only(left: 2),
-                              child: IconButton(
-                                onPressed: () {
-                                  setState(() {
-                                    editPressed[index] = true;
-                                  });
-                                  print(editPressed[index]);
-                                },
-                                icon: Icon(Icons.edit),
-                              ),
-                            ),
+                            TextInput(editPressed, _controllers, itemId, index),
                             Container(
                               padding: EdgeInsets.symmetric(horizontal: 2),
                               child: IconButton(
@@ -190,5 +152,73 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           );
         });
+  }
+}
+
+// ignore: must_be_immutable
+class TextInput extends StatefulWidget {
+  List<bool> editPressed;
+  List<TextEditingController> _controllers;
+  List<String> itemId;
+  int index;
+  TextInput(
+    this.editPressed,
+    this._controllers,
+    this.itemId,
+    this.index,
+  );
+
+  @override
+  _TextInputState createState() => _TextInputState();
+}
+
+class _TextInputState extends State<TextInput> {
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: Row(
+        children: [
+          IconButton(
+            onPressed: () {
+              if (widget._controllers[widget.index].text.isNotEmpty) {
+                Services().updateData(widget._controllers[widget.index].text,
+                    widget.itemId[widget.index]);
+                setState(() {
+                  widget.editPressed[widget.index] = false;
+                });
+                log(widget.editPressed.toString());
+              }
+            },
+            icon: Icon(Icons.done_outlined),
+          ),
+          // editPressed
+          Expanded(
+            child: Container(
+              child: SingleChildScrollView(
+                scrollDirection: Axis.vertical,
+                child: TextFormField(
+                  maxLines: null,
+                  controller: widget._controllers[widget.index],
+                  enabled: widget.editPressed[widget.index],
+                ),
+              ),
+            ),
+          ),
+          // : Text(itemList[index]),
+          Container(
+            padding: EdgeInsets.only(left: 2),
+            child: IconButton(
+              onPressed: () {
+                setState(() {
+                  widget.editPressed[widget.index] = true;
+                });
+                log(widget.editPressed.toString());
+              },
+              icon: Icon(Icons.edit),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }
